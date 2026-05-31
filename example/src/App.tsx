@@ -47,16 +47,16 @@ function App() {
       const isGreg = !isEth;
 
       if (targetFormat === 'gregorian' && isEth) {
-          const greg = toGregorian(d.year, d.month, d.day);
-          const gTime = toGregorianTime(d.hour || 1, d.minute || 0, (d.ampm as any) || 'ቀን');
-          const gTime12 = toGregorianTime12h(gTime.hour);
-          return { ...d, year: greg.year, month: greg.month, day: greg.day, hour: gTime12.hour, minute: gTime.minute, ampm: gTime12.ampm };
+        const greg = toGregorian(d.year, d.month, d.day);
+        const gTime = toGregorianTime(d.hour || 1, d.minute || 0, (d.ampm as any) || 'ቀን');
+        const gTime12 = toGregorianTime12h(gTime.hour);
+        return { ...d, year: greg.year, month: greg.month, day: greg.day, hour: gTime12.hour, minute: gTime.minute, ampm: gTime12.ampm };
       }
       if (targetFormat === 'ethiopian' && isGreg) {
-          const eth = toEthiopian(d.year, d.month, d.day);
-          const gTime24 = toGregorianTime24h(d.hour || 12, (d.ampm as any) || 'AM');
-          const ethTime = toEthiopianTime(gTime24, d.minute || 0);
-          return { ...d, year: eth.year, month: eth.month, day: eth.day, hour: ethTime.hour, minute: ethTime.minute, ampm: ethTime.ampm };
+        const eth = toEthiopian(d.year, d.month, d.day);
+        const gTime24 = toGregorianTime24h(d.hour || 12, (d.ampm as any) || 'AM');
+        const ethTime = toEthiopianTime(gTime24, d.minute || 0);
+        return { ...d, year: eth.year, month: eth.month, day: eth.day, hour: ethTime.hour, minute: ethTime.minute, ampm: ethTime.ampm };
       }
       return d;
     };
@@ -74,7 +74,7 @@ function App() {
       <aside className="sidebar">
         <div className="brand">
           <h1>Amharic Date Picker</h1>
-          <p>v1.0.0 • by Codeabay</p>
+          <p>v1.0.2 • by Codeabay</p>
         </div>
 
         <div className="sidebar-content">

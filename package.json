@@ -1,7 +1,34 @@
 {
   "name": "amharic-datepicker",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A modern, highly customizable React component for picking Amharic (Ethiopian) dates, built with zero external calendar dependencies.",
+  "author": "Mikiyas Lemlemu <Mikiyaslemlemu@gmail.com>",
+  "license": "ISC",
+  "type": "commonjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/mikiyasET/amharic-datepicker/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikiyasET/amharic-datepicker.git"
+  },
+  "keywords": [
+    "Amharic",
+    "Ethiopian",
+    "React",
+    "Date Picker",
+    "Codeabay",
+    "Ethiopian Calendar",
+    "Amharic Calendar",
+    "Ethiopian Date Picker",
+    "Amharic Date Picker",
+    "Ethiopian Date Selector",
+    "Amharic Date Selector",
+    "Ethiopian Date Component",
+    "Amharic Date Component"
+  ],
   "main": "dist/index.js",
   "scripts": {
     "build": "tsup"
@@ -16,11 +43,5 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vite": "^8.0.14"
-  },
-  "keywords": [],
-  "author": "Mikiyas Lemlemu <Mikiyaslemlemu@gmail.com>",
-  "license": "ISC",
-  "type": "commonjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts"
+  }
 }

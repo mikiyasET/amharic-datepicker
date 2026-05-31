@@ -1,6 +1,6 @@
 # Amharic Date Picker
 
-![Amharic Date Picker](assets/am-datepicker.jpg)
+![Amharic Date Picker](https://raw.githubusercontent.com/mikiyasET/amharic-datepicker/main/assets/am-datepicker.jpg)
 
 A modern, highly customizable React component for picking Amharic (Ethiopian) dates. Built with zero external calendar dependencies to keep it lightweight, fast, and bug-free.
 
