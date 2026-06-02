@@ -4,6 +4,8 @@
 
 A modern, highly customizable React component for picking Amharic (Ethiopian) dates. Built with zero external calendar dependencies to keep it lightweight, fast, and bug-free.
 
+> **Looking for the backend/logic-only package?** Use [`amharic-datepicker-utils`](https://www.npmjs.com/package/amharic-datepicker-utils) — the same calendar conversion logic with no React dependency. This package (`amharic-datepicker`) depends on it automatically and re-exports all its functions.
+
 ## Features
 
 - **Standalone Logic:** Uses custom internal logic for the Ethiopian calendar (including leap years and Pagume logic).
@@ -103,15 +105,14 @@ interface CustomColors {
 
 ### 2. Utility Functions
 
-You can also use the calendar conversion logic independently:
+All calendar and time conversion functions are re-exported from [`amharic-datepicker-utils`](https://www.npmjs.com/package/amharic-datepicker-utils). You can import them directly:
 
 ```typescript
-import { 
-  toGregorian, 
-  toEthiopian, 
-  ethMonths, 
-  ethDays 
-} from 'amharic-datepicker';
+// Import from this package (re-exported for convenience)
+import { toGregorian, toEthiopian, ethMonths, ethDays } from 'amharic-datepicker';
+
+// Or import from the utils package directly (same functions)
+import { toGregorian, toEthiopian } from 'amharic-datepicker-utils';
 
 // Gregorian to Ethiopian
 const ethDate = toEthiopian(2023, 9, 12); 
@@ -124,6 +125,17 @@ console.log(gregDate); // { year: 2023, month: 9, day: 12 }
 console.log(ethMonths[0]); // "መስከረም"
 console.log(ethDays[0]); // "እሑድ"
 ```
+
+> **Tip for backend developers:** If you only need the conversion logic (no React UI), install `amharic-datepicker-utils` instead. It has zero dependencies and works in any JavaScript runtime.
+
+## Package Architecture
+
+This project is split into two packages:
+
+| Package | Description | Install |
+|---------|-------------|---------|
+| [`amharic-datepicker-utils`](https://www.npmjs.com/package/amharic-datepicker-utils) | Pure TS calendar/time conversion logic (zero deps) | `npm install amharic-datepicker-utils` |
+| [`amharic-datepicker`](https://www.npmjs.com/package/amharic-datepicker) | React UI component (depends on utils) | `npm install amharic-datepicker` |
 
 ## Running the Example Locally
 

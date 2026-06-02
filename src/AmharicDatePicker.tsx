@@ -20,7 +20,7 @@ import {
     toGregorianTime12h,
     toGregorian,
     toGregorianTime24h
-} from './calendar-logic';
+} from 'amharic-datepicker-utils';
 import './AmharicDatePicker.css';
 
 export interface EthDateValue {

@@ -30,8 +30,18 @@
     "Amharic Date Component"
   ],
   "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsup"
+  },
+  "dependencies": {
+    "amharic-datepicker-utils": "^1.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.15",
