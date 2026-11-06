@@ -6,13 +6,21 @@ import './App.css'
 function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
   const [calendarType, setCalendarType] = useState<'ethiopian' | 'gregorian'>('ethiopian')
-  const [primaryColor, setPrimaryColor] = useState<string>('#10b981')
+  const [primaryColor, setPrimaryColor] = useState<string>('#0b7077')
   const [showTime, setShowTime] = useState<boolean>(true)
   const [showActions, setShowActions] = useState<boolean>(true)
   const [selectsRange, setSelectsRange] = useState<boolean>(false)
   const [size, setSize] = useState<'small' | 'medium' | 'large'>('medium')
   const [customColors, setCustomColors] = useState<Record<string, string>>({})
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false)
+
+  // New modern features
+  const [allowManualInput, setAllowManualInput] = useState<boolean>(true)
+  const [clearable, setClearable] = useState<boolean>(true)
+  const [showTodayButton, setShowTodayButton] = useState<boolean>(true)
+  const [useGeez, setUseGeez] = useState<boolean>(false)
+  const [disabled, setDisabled] = useState<boolean>(false)
+  const [readOnly, setReadOnly] = useState<boolean>(false)
 
   const [outputFormat, setOutputFormat] = useState<'ethiopian' | 'gregorian'>('ethiopian')
 
@@ -28,10 +36,11 @@ function App() {
     { key: 'saveBtnText', label: 'Save Btn Text' },
     { key: 'cancelBtnBg', label: 'Cancel Btn BG' },
     { key: 'cancelBtnText', label: 'Cancel Btn Text' },
+    { key: 'todayBtnText', label: 'Today Btn Text' },
     { key: 'inRangeBg', label: 'In-Range BG' }
   ]
 
-  const [date, setDate] = useState<EthDateValue>(() => {
+  const [date, setDate] = useState<EthDateValue | null>(() => {
     const now = new Date()
     const eDate = toEthiopian(now.getFullYear(), now.getMonth() + 1, now.getDate())
     const eTime = toEthiopianTime(now.getHours(), now.getMinutes())
@@ -42,31 +51,32 @@ function App() {
 
   // Automatically convert the UI's local state so the Terminal updates instantly when changing Output format
   useEffect(() => {
-    const convertD = (d: EthDateValue, targetFormat: 'ethiopian' | 'gregorian'): EthDateValue => {
-      const isEth = d.year < 2020 || d.ampm === 'ቀን' || d.ampm === 'ማታ' || d.ampm === 'ጠዋት' || d.ampm === 'ከሰዓት' || d.ampm === 'ምሽት' || d.ampm === 'ሌሊት';
-      const isGreg = !isEth;
+    const convertD = (d: EthDateValue | null, targetFormat: 'ethiopian' | 'gregorian'): EthDateValue | null => {
+      if (!d) return null
+      const isEth = d.month === 13 || d.ampm === 'ቀን' || d.ampm === 'ማታ' || d.ampm === 'ጠዋት' || d.ampm === 'ከሰዓት' || d.ampm === 'ምሽት' || d.ampm === 'ሌሊት'
+      const isGreg = !isEth
 
       if (targetFormat === 'gregorian' && isEth) {
-        const greg = toGregorian(d.year, d.month, d.day);
-        const gTime = toGregorianTime(d.hour || 1, d.minute || 0, (d.ampm as any) || 'ቀን');
-        const gTime12 = toGregorianTime12h(gTime.hour);
-        return { ...d, year: greg.year, month: greg.month, day: greg.day, hour: gTime12.hour, minute: gTime.minute, ampm: gTime12.ampm };
+        const greg = toGregorian(d.year, d.month, d.day)
+        const gTime = toGregorianTime(d.hour || 1, d.minute || 0, (d.ampm as any) || 'ቀን')
+        const gTime12 = toGregorianTime12h(gTime.hour)
+        return { ...d, year: greg.year, month: greg.month, day: greg.day, hour: gTime12.hour, minute: gTime.minute, ampm: gTime12.ampm }
       }
       if (targetFormat === 'ethiopian' && isGreg) {
-        const eth = toEthiopian(d.year, d.month, d.day);
-        const gTime24 = toGregorianTime24h(d.hour || 12, (d.ampm as any) || 'AM');
-        const ethTime = toEthiopianTime(gTime24, d.minute || 0);
-        return { ...d, year: eth.year, month: eth.month, day: eth.day, hour: ethTime.hour, minute: ethTime.minute, ampm: ethTime.ampm };
+        const eth = toEthiopian(d.year, d.month, d.day)
+        const gTime24 = toGregorianTime24h(d.hour || 12, (d.ampm as any) || 'AM')
+        const ethTime = toEthiopianTime(gTime24, d.minute || 0)
+        return { ...d, year: eth.year, month: eth.month, day: eth.day, hour: ethTime.hour, minute: ethTime.minute, ampm: ethTime.ampm }
       }
-      return d;
-    };
+      return d
+    }
 
-    setDate(prev => convertD(prev, outputFormat));
+    if (date) setDate(prev => convertD(prev, outputFormat))
     setRangeDates(prev => [
-      prev[0] ? convertD(prev[0], outputFormat) : null,
-      prev[1] ? convertD(prev[1], outputFormat) : null
-    ]);
-  }, [outputFormat]);
+      convertD(prev[0], outputFormat),
+      convertD(prev[1], outputFormat)
+    ])
+  }, [outputFormat])
 
   return (
     <div className={`layout ${theme}`}>
@@ -74,11 +84,10 @@ function App() {
       <aside className="sidebar">
         <div className="brand">
           <h1>Amharic Date Picker</h1>
-          <p>v1.0.2 • by Codeabay</p>
+          <p>v1.1.0 • Modernized & Editable</p>
         </div>
 
         <div className="sidebar-content">
-
           <div className="control-group">
             <span className="control-group-title">Environment</span>
             <select className="modern-select" value={theme} onChange={(e) => setTheme(e.target.value as 'light' | 'dark')}>
@@ -86,7 +95,7 @@ function App() {
               <option value="dark">Dark Mode</option>
             </select>
             <select className="modern-select" value={calendarType} onChange={(e) => setCalendarType(e.target.value as 'ethiopian' | 'gregorian')}>
-              <option value="ethiopian">UI: Ethiopian (Ge'ez)</option>
+              <option value="ethiopian">UI: Ethiopian (ግዕዝ / Amharic)</option>
               <option value="gregorian">UI: Gregorian (Western)</option>
             </select>
             <select className="modern-select" value={outputFormat} onChange={(e) => setOutputFormat(e.target.value as 'ethiopian' | 'gregorian')}>
@@ -99,26 +108,50 @@ function App() {
             <span className="control-group-title">Component Props</span>
             <select className="modern-select" value={size} onChange={(e) => setSize(e.target.value as 'small' | 'medium' | 'large')}>
               <option value="small">Size: Small</option>
-              <option value="medium">Size: Medium</option>
+              <option value="medium">Size: Medium (Default)</option>
               <option value="large">Size: Large</option>
             </select>
 
+            <label className="checkbox-row">
+              <input type="checkbox" className="modern-checkbox" checked={allowManualInput} onChange={(e) => setAllowManualInput(e.target.checked)} />
+              <span>Allow Manual Typing (Editable)</span>
+            </label>
+            <label className="checkbox-row">
+              <input type="checkbox" className="modern-checkbox" checked={clearable} onChange={(e) => setClearable(e.target.checked)} />
+              <span>Clearable (× Button)</span>
+            </label>
+            <label className="checkbox-row">
+              <input type="checkbox" className="modern-checkbox" checked={showTodayButton} onChange={(e) => setShowTodayButton(e.target.checked)} />
+              <span>Show "Today" Jump Button</span>
+            </label>
+            <label className="checkbox-row">
+              <input type="checkbox" className="modern-checkbox" checked={useGeez} onChange={(e) => setUseGeez(e.target.checked)} />
+              <span>Ge'ez Numerals (፩, ፪, ፫...)</span>
+            </label>
             <label className="checkbox-row">
               <input type="checkbox" className="modern-checkbox" checked={showTime} onChange={(e) => setShowTime(e.target.checked)} />
               <span>Show Time Selection</span>
             </label>
             <label className="checkbox-row">
               <input type="checkbox" className="modern-checkbox" checked={showActions} onChange={(e) => setShowActions(e.target.checked)} />
-              <span>Show Save/Cancel Bar</span>
+              <span>Show Action Bar (Save/Cancel)</span>
             </label>
             <label className="checkbox-row">
               <input type="checkbox" className="modern-checkbox" checked={selectsRange} onChange={(e) => setSelectsRange(e.target.checked)} />
-              <span>Enable Range Selection</span>
+              <span>Range Selection Mode</span>
+            </label>
+            <label className="checkbox-row">
+              <input type="checkbox" className="modern-checkbox" checked={disabled} onChange={(e) => setDisabled(e.target.checked)} />
+              <span>Disabled</span>
+            </label>
+            <label className="checkbox-row">
+              <input type="checkbox" className="modern-checkbox" checked={readOnly} onChange={(e) => setReadOnly(e.target.checked)} />
+              <span>ReadOnly Input</span>
             </label>
           </div>
 
           <div className="control-group">
-            <span className="control-group-title">Theming</span>
+            <span className="control-group-title">Theming & Brand</span>
             <div className="color-row">
               <input type="color" className="color-picker" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
               <span className="color-value">{primaryColor}</span>
@@ -126,7 +159,7 @@ function App() {
 
             <div style={{ marginTop: '8px' }}>
               <div className="advanced-toggle" onClick={() => setShowAdvanced(!showAdvanced)}>
-                <span>Advanced Colors</span>
+                <span>Advanced Color Overrides</span>
                 <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>{showAdvanced ? '−' : '+'}</span>
               </div>
 
@@ -166,12 +199,12 @@ function App() {
       {/* Main Content Area */}
       <main className="main-content">
         <header className="preview-header">
-          <CalendarIcon size={20} color={theme === 'dark' ? '#34d399' : '#059669'} />
+          <CalendarIcon size={20} color={theme === 'dark' ? '#34d399' : '#0b7077'} />
           <h2>Interactive Preview</h2>
         </header>
 
         <div className="preview-body">
-          <div className="component-wrapper" style={{ width: size === 'large' ? '320px' : size === 'medium' ? '280px' : '260px', transition: 'width 0.3s ease' }}>
+          <div className="component-wrapper" style={{ width: size === 'large' ? '360px' : size === 'medium' ? '320px' : '270px', transition: 'width 0.3s ease' }}>
             {selectsRange ? (
               <AmharicDatePicker
                 selectsRange={true}
@@ -186,7 +219,13 @@ function App() {
                 primaryColor={primaryColor}
                 customColors={customColors}
                 size={size}
-                placeholder="Select Date Range..."
+                allowManualInput={allowManualInput}
+                clearable={clearable}
+                showTodayButton={showTodayButton}
+                useGeez={useGeez}
+                disabled={disabled}
+                readOnly={readOnly}
+                placeholder="ቀን ይምረጡ / Select Date Range..."
               />
             ) : (
               <AmharicDatePicker
@@ -200,7 +239,13 @@ function App() {
                 primaryColor={primaryColor}
                 customColors={customColors}
                 size={size}
-                placeholder="Select Date..."
+                allowManualInput={allowManualInput}
+                clearable={clearable}
+                showTodayButton={showTodayButton}
+                useGeez={useGeez}
+                disabled={disabled}
+                readOnly={readOnly}
+                placeholder="ቀን ይምረጡ / Select Date..."
               />
             )}
           </div>
@@ -218,48 +263,16 @@ function App() {
                 <div className="code-comment">// Selected Range Array [startDate, endDate]</div>
                 {'['}
                 <br />
-                &nbsp;&nbsp;{rangeDates[0] ? (
-                  <>
-                    {'{'} <span className="code-key">year</span>: <span className="code-number">{rangeDates[0].year}</span>, <span className="code-key">month</span>: <span className="code-number">{rangeDates[0].month}</span>, <span className="code-key">day</span>: <span className="code-number">{rangeDates[0].day}</span>
-                    {rangeDates[0].hour !== undefined && (
-                      <>, <span className="code-key">hour</span>: <span className="code-number">{rangeDates[0].hour}</span>, <span className="code-key">minute</span>: <span className="code-number">{rangeDates[0].minute}</span>, <span className="code-key">ampm</span>: <span className="code-string">'{rangeDates[0].ampm}'</span></>
-                    )} {'}'},
-                  </>
-                ) : 'null,'}
+                &nbsp;&nbsp;{rangeDates[0] ? JSON.stringify(rangeDates[0]) : 'null'},
                 <br />
-                &nbsp;&nbsp;{rangeDates[1] ? (
-                  <>
-                    {'{'} <span className="code-key">year</span>: <span className="code-number">{rangeDates[1].year}</span>, <span className="code-key">month</span>: <span className="code-number">{rangeDates[1].month}</span>, <span className="code-key">day</span>: <span className="code-number">{rangeDates[1].day}</span>
-                    {rangeDates[1].hour !== undefined && (
-                      <>, <span className="code-key">hour</span>: <span className="code-number">{rangeDates[1].hour}</span>, <span className="code-key">minute</span>: <span className="code-number">{rangeDates[1].minute}</span>, <span className="code-key">ampm</span>: <span className="code-string">'{rangeDates[1].ampm}'</span></>
-                    )} {'}'}
-                  </>
-                ) : 'null'}
+                &nbsp;&nbsp;{rangeDates[1] ? JSON.stringify(rangeDates[1]) : 'null'}
                 <br />
                 {']'}
               </>
             ) : (
               <>
-                <div className="code-comment">// Selected Date Object</div>
-                {`{`}
-                <br />
-                &nbsp;&nbsp;<span className="code-key">year</span>: <span className="code-number">{date.year}</span>,
-                <br />
-                &nbsp;&nbsp;<span className="code-key">month</span>: <span className="code-number">{date.month}</span>,
-                <br />
-                &nbsp;&nbsp;<span className="code-key">day</span>: <span className="code-number">{date.day}</span>
-                {date.hour !== undefined && (
-                  <>
-                    ,<br />
-                    &nbsp;&nbsp;<span className="code-key">hour</span>: <span className="code-number">{date.hour}</span>,
-                    <br />
-                    &nbsp;&nbsp;<span className="code-key">minute</span>: <span className="code-number">{date.minute}</span>,
-                    <br />
-                    &nbsp;&nbsp;<span className="code-key">ampm</span>: <span className="code-string">'{date.ampm}'</span>
-                  </>
-                )}
-                <br />
-                {`}`}
+                <div className="code-comment">// Selected Single Date Object</div>
+                {date ? JSON.stringify(date, null, 2) : 'null'}
               </>
             )}
           </div>

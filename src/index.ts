@@ -1,2 +1,9 @@
-export { AmharicDatePicker, type EthDateValue, type AmharicDatePickerProps } from './AmharicDatePicker';
+export { 
+    AmharicDatePicker, 
+    type EthDateValue, 
+    type DatePickerValue, 
+    type AmharicDatePickerProps, 
+    type CustomColors, 
+    compareEthDates 
+} from './AmharicDatePicker';
 export * from 'amharic-datepicker-utils';

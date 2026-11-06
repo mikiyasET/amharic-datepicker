@@ -1,134 +1,250 @@
+/* ==========================================================================
+   Amharic Date Picker — Modern & Sleek Stylesheet
+   ========================================================================== */
+
+:root {
+    --eth-dp-primary: #0b7077;
+    --eth-dp-text: #1f2937;
+    --eth-dp-selected-text: #ffffff;
+    --eth-dp-hover-bg: #f3f4f6;
+    --eth-dp-hover-text: #111827;
+    --eth-dp-selected-hover-text: #ffffff;
+    --eth-dp-disabled-text: #cbd5e1;
+    --eth-dp-month-header: #111827;
+    --eth-dp-save-bg: var(--eth-dp-primary, #0b7077);
+    --eth-dp-save-text: #ffffff;
+    --eth-dp-cancel-bg: #ffffff;
+    --eth-dp-cancel-text: #4b5563;
+    --eth-dp-today-bg: transparent;
+    --eth-dp-today-text: var(--eth-dp-primary, #0b7077);
+    --eth-dp-in-range-bg: color-mix(in srgb, var(--eth-dp-primary, #0b7077) 16%, transparent);
+    --eth-dp-today-indicator: var(--eth-dp-primary, #0b7077);
+    --eth-dp-input-bg: #ffffff;
+    --eth-dp-input-border: #e2e8f0;
+    --eth-dp-input-focus-border: var(--eth-dp-primary, #0b7077);
+}
+
 .eth-dp-container {
     position: relative;
-    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Noto Sans Ethiopic", Helvetica, Arial, sans-serif;
     display: inline-block;
     width: 100%;
     max-width: 320px;
-    container-type: inline-size;
+    box-sizing: border-box;
+}
+
+.eth-dp-container.is-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* --------------------------------------------------------------------------
+   Input Field & Actions
+   -------------------------------------------------------------------------- */
+.eth-dp-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
 .eth-dp-input {
     width: 100%;
-    padding: 10px 14px;
-    font-size: clamp(11px, 5cqw, 16px);
-    color: #374151;
-    background-color: #fff;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    transition: all 0.2s;
-    cursor: text;
+    padding: 9px 66px 9px 13px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--eth-dp-text);
+    background-color: var(--eth-dp-input-bg);
+    border: 1px solid var(--eth-dp-input-border);
+    border-radius: 8px;
+    transition: all 0.18s ease-in-out;
     box-sizing: border-box;
+    outline: none;
+    line-height: 1.5;
+}
+
+.eth-dp-input::placeholder {
+    color: #9ca3af;
+    font-size: 13.5px;
 }
 
 .eth-dp-input:focus {
-    border-color: var(--eth-dp-primary, #0b7077);
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(11, 112, 119, 0.1);
+    border-color: var(--eth-dp-input-focus-border);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--eth-dp-primary) 18%, transparent);
 }
 
+.eth-dp-input:disabled {
+    background-color: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.eth-dp-input-actions {
+    position: absolute;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.eth-dp-clear-btn,
+.eth-dp-calendar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    padding: 5px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.eth-dp-clear-btn:hover {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.08);
+}
+
+.eth-dp-calendar-btn:hover {
+    color: var(--eth-dp-primary);
+    background-color: color-mix(in srgb, var(--eth-dp-primary) 10%, transparent);
+}
+
+.eth-dp-calendar-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   Calendar Popup Card
+   -------------------------------------------------------------------------- */
 .eth-dp-popup {
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
     width: 320px;
-    background-color: #fff;
-    color: var(--eth-dp-text, #111827);
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    z-index: 100;
+    background-color: #ffffff;
+    color: var(--eth-dp-text);
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    z-index: 1000;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    animation: ethDpSlideIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@keyframes ethDpSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
 .eth-dp-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 20px 10px 20px;
-    background-color: #fff;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-color: #f0f0f0;
+    padding: 14px 16px 10px 16px;
+    background-color: #ffffff;
 }
 
 .eth-dp-header-left {
     display: flex;
-    align-items: baseline;
-    gap: 8px;
+    align-items: center;
+    gap: 6px;
 }
 
-.eth-dp-month-label {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--eth-dp-month-header, #111827);
+.eth-dp-header-pill {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--eth-dp-month-header);
     cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.eth-dp-month-label:hover {
-    color: var(--eth-dp-primary, #0b7077);
+.eth-dp-header-pill:hover {
+    background-color: #f1f5f9;
+    color: var(--eth-dp-primary);
 }
 
-.eth-dp-year-label {
-    font-size: 20px;
-    font-weight: 500;
-    color: #6b7280;
-    cursor: pointer;
-}
-
-.eth-dp-year-label:hover {
-    color: var(--eth-dp-primary, #0b7077);
+.eth-dp-header-range {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--eth-dp-month-header);
+    padding: 4px 8px;
 }
 
 .eth-dp-header-right {
     display: flex;
-    gap: 16px;
+    align-items: center;
+    gap: 4px;
 }
 
 .eth-dp-icon-btn {
     background: transparent;
     border: none;
     cursor: pointer;
-    color: #374151;
-    padding: 4px;
-    display: flex;
+    color: #475569;
+    padding: 6px;
+    border-radius: 50%;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    transition: all 0.15s ease;
 }
 
 .eth-dp-icon-btn:hover {
-    background-color: #f3f4f6;
-    color: #111827;
+    background-color: #f1f5f9;
+    color: #0f172a;
 }
 
+/* --------------------------------------------------------------------------
+   Body & Grid
+   -------------------------------------------------------------------------- */
 .eth-dp-body {
-    padding: 0 20px 10px 20px;
+    padding: 0 14px 10px 14px;
 }
 
 .eth-dp-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .eth-dp-weekday {
-    color: #4b5563;
-    font-size: 14px;
-    font-weight: 500;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
     text-align: center;
+    letter-spacing: 0.02em;
 }
 
 .eth-dp-days-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 4px 0;
+    gap: 3px 0;
 }
 
 .eth-dp-day {
+    position: relative;
     cursor: pointer;
-    color: var(--eth-dp-text, #374151);
+    color: var(--eth-dp-text);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -138,34 +254,58 @@
     border-radius: 50%;
     background: transparent;
     border: none;
-    font-size: 15px;
+    font-size: 14px;
+    font-family: inherit;
     font-weight: 400;
-    transition: background-color 0.1s;
+    transition: all 0.12s ease;
+    box-sizing: border-box;
 }
 
-.eth-dp-day:not(.empty):hover {
-    background-color: var(--eth-dp-hover-bg, #f3f4f6);
-    color: var(--eth-dp-hover-text, inherit);
+.eth-dp-day:not(.empty):not(.is-disabled):hover {
+    background-color: var(--eth-dp-hover-bg);
+    color: var(--eth-dp-hover-text);
 }
 
 .eth-dp-day.empty {
-    color: var(--eth-dp-disabled-text, #d1d5db);
+    color: var(--eth-dp-disabled-text);
     cursor: default;
+    pointer-events: none;
+}
+
+.eth-dp-day.is-disabled {
+    color: var(--eth-dp-disabled-text);
+    cursor: not-allowed;
+    opacity: 0.45;
 }
 
 .eth-dp-day.selected {
-    background-color: var(--eth-dp-primary, #0b7077);
-    color: var(--eth-dp-selected-text, #fff);
-    font-weight: 500;
+    background-color: var(--eth-dp-primary) !important;
+    color: var(--eth-dp-selected-text) !important;
+    font-weight: 600;
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--eth-dp-primary) 35%, transparent);
 }
 
 .eth-dp-day.selected:hover {
-    filter: brightness(0.85);
-    color: var(--eth-dp-selected-hover-text, #000);
+    color: var(--eth-dp-selected-hover-text);
+    filter: brightness(0.92);
 }
 
+/* Today dot indicator */
+.eth-dp-day.is-today:not(.selected)::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--eth-dp-today-indicator);
+}
+
+/* Range Selection Styling */
 .eth-dp-day.in-range {
-    background-color: var(--eth-dp-in-range-bg, color-mix(in srgb, var(--eth-dp-primary, #0b7077) 15%, transparent));
+    background-color: var(--eth-dp-in-range-bg);
     border-radius: 0;
 }
 
@@ -183,27 +323,92 @@
     border-radius: 50%;
 }
 
+/* --------------------------------------------------------------------------
+   Month & Year Grid
+   -------------------------------------------------------------------------- */
+.eth-dp-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px 0;
+}
+
+.eth-dp-grid-btn {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 12px 4px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--eth-dp-text);
+    transition: all 0.12s ease;
+    text-align: center;
+}
+
+.eth-dp-grid-btn:hover {
+    background-color: var(--eth-dp-hover-bg);
+    color: var(--eth-dp-hover-text);
+}
+
+.eth-dp-grid-btn.selected {
+    background-color: var(--eth-dp-primary) !important;
+    color: var(--eth-dp-selected-text) !important;
+    font-weight: 600;
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--eth-dp-primary) 35%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   Time Section
+   -------------------------------------------------------------------------- */
 .eth-dp-time-section {
-    border-top: 1px solid #e5e7eb;
-    padding: 16px 20px;
+    border-top: 1px solid #f1f5f9;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    background-color: #fff;
+    background-color: #fafafa;
 }
 
 .eth-dp-time-inputs {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background-color: transparent;
-    border: none;
+    gap: 6px;
+}
+
+.eth-dp-time-colon {
+    font-weight: 700;
+    color: #475569;
+    font-size: 14px;
+}
+
+.eth-dp-select {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 5px 22px 5px 8px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: var(--eth-dp-text);
+    background-color: #ffffff;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    background-size: 14px;
+    transition: border-color 0.15s ease;
+}
+
+.eth-dp-select:focus {
+    border-color: var(--eth-dp-primary);
 }
 
 .eth-dp-range-time-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
 }
 
@@ -215,355 +420,303 @@
 }
 
 .eth-dp-range-time-label {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 500;
-    color: var(--eth-dp-text, #374151);
+    color: #475569;
 }
 
-.eth-dp-time-inputs.range-inputs .eth-dp-select {
-    font-size: 13px;
-    padding: 4px 20px 4px 6px;
-    background-size: 8px auto;
-    background-position: right 6px top 50%;
-}
-
-.eth-dp-time-inputs.range-inputs .eth-dp-time-colon {
-    font-size: 13px;
-}
-
-.eth-dp-select {
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 6px 8px;
-    font-size: 15px;
-    color: #374151;
-    background-color: #fff;
-    outline: none;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23374151%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px top 50%;
-    background-size: 10px auto;
-    padding-right: 24px;
-}
-
-.eth-dp-select:focus {
-    border-color: var(--eth-dp-primary, #0b7077);
-}
-
-.eth-dp-time-colon {
-    font-weight: 500;
-    color: #374151;
-}
-
+/* --------------------------------------------------------------------------
+   Actions Footer (Today, Cancel, Save)
+   -------------------------------------------------------------------------- */
 .eth-dp-actions {
-    background-color: #f9fafb;
-    border-top: 1px solid #e5e7eb;
-    padding: 16px 20px;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 10px 14px;
     display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.eth-dp-actions-left {
+    display: flex;
+    align-items: center;
+}
+
+.eth-dp-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.eth-dp-today-btn {
+    background-color: var(--eth-dp-today-bg);
+    border: 1px solid transparent;
+    color: var(--eth-dp-today-text);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.eth-dp-today-btn:hover {
+    background-color: color-mix(in srgb, var(--eth-dp-primary) 10%, transparent);
 }
 
 .eth-dp-cancel-btn {
-    background-color: var(--eth-dp-cancel-bg, #fff);
-    border: 1px solid #d1d5db;
-    color: var(--eth-dp-cancel-text, #374151);
-    padding: 8px 16px;
+    background-color: var(--eth-dp-cancel-bg);
+    border: 1px solid #cbd5e1;
+    color: var(--eth-dp-cancel-text);
+    padding: 6px 14px;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
+    font-family: inherit;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.1s;
+    transition: all 0.15s ease;
 }
 
 .eth-dp-cancel-btn:hover {
-    background-color: #f3f4f6;
+    background-color: #f1f5f9;
 }
 
 .eth-dp-save-btn {
-    background-color: var(--eth-dp-save-bg, var(--eth-dp-primary, #0b7077));
-    border: 1px solid var(--eth-dp-save-bg, var(--eth-dp-primary, #0b7077));
-    color: var(--eth-dp-save-text, #fff);
-    padding: 8px 16px;
+    background-color: var(--eth-dp-save-bg);
+    border: 1px solid var(--eth-dp-save-bg);
+    color: var(--eth-dp-save-text);
+    padding: 6px 16px;
     border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.1s;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .eth-dp-save-btn:hover {
-    filter: brightness(0.85);
+    filter: brightness(0.92);
 }
 
-.eth-dp-grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 10px 0;
+/* ==========================================================================
+   Dark Theme (Zinc / Slate Modern Palette)
+   ========================================================================== */
+.eth-dp-theme-dark {
+    --eth-dp-text: #f8fafc;
+    --eth-dp-month-header: #f8fafc;
+    --eth-dp-hover-bg: #334155;
+    --eth-dp-hover-text: #ffffff;
+    --eth-dp-disabled-text: #475569;
+    --eth-dp-cancel-bg: #1e293b;
+    --eth-dp-cancel-text: #cbd5e1;
+    --eth-dp-input-bg: #1e293b;
+    --eth-dp-input-border: #334155;
+    --eth-dp-in-range-bg: color-mix(in srgb, var(--eth-dp-primary, #0b7077) 24%, transparent);
 }
 
-.eth-dp-grid-btn {
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    padding: 16px 2px;
-    border-radius: 8px;
-    font-size: 14px;
-    color: var(--eth-dp-text, #374151);
-    transition: background-color 0.1s;
-    text-align: center;
-}
-
-.eth-dp-grid-btn:hover {
-    background-color: var(--eth-dp-hover-bg, #f3f4f6);
-    color: var(--eth-dp-hover-text, inherit);
-}
-
-.eth-dp-grid-btn.selected {
-    background-color: var(--eth-dp-primary, #0b7077);
-    color: var(--eth-dp-selected-text, #fff);
-    font-weight: 500;
-}
-
-.eth-dp-grid-btn.selected:hover {
-    filter: brightness(0.85);
-    color: var(--eth-dp-selected-hover-text, #000);
-}
-
-/* Dark mode explicit support */
 .eth-dp-theme-dark .eth-dp-input {
-    background-color: #1f2937;
-    color: #f3f4f6;
-    border-color: #4b5563;
+    background-color: var(--eth-dp-input-bg);
+    border-color: var(--eth-dp-input-border);
+    color: var(--eth-dp-text);
 }
 
-.eth-dp-theme-dark .eth-dp-popup,
-.eth-dp-theme-dark .eth-dp-header,
-.eth-dp-theme-dark .eth-dp-time-section {
-    background-color: #1f2937;
-    color: #f3f4f6;
-    border-color: #374151;
+.eth-dp-theme-dark .eth-dp-input::placeholder {
+    color: #64748b;
 }
 
-.eth-dp-theme-dark .eth-dp-month-label {
-    color: #f9fafb;
+.eth-dp-theme-dark .eth-dp-popup {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: var(--eth-dp-text);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.eth-dp-theme-dark .eth-dp-year-label {
-    color: #9ca3af;
+.eth-dp-theme-dark .eth-dp-header {
+    background-color: #0f172a;
+}
+
+.eth-dp-theme-dark .eth-dp-header-pill:hover,
+.eth-dp-theme-dark .eth-dp-icon-btn:hover {
+    background-color: #1e293b;
+    color: #f8fafc;
 }
 
 .eth-dp-theme-dark .eth-dp-icon-btn {
-    color: #d1d5db;
-}
-
-.eth-dp-theme-dark .eth-dp-icon-btn:hover {
-    background-color: #374151;
-    color: #f9fafb;
+    color: #94a3b8;
 }
 
 .eth-dp-theme-dark .eth-dp-weekday {
-    color: #9ca3af;
+    color: #94a3b8;
 }
 
 .eth-dp-theme-dark .eth-dp-day,
 .eth-dp-theme-dark .eth-dp-grid-btn {
-    color: #f3f4f6;
-}
-
-.eth-dp-theme-dark .eth-dp-day.in-range {
-    background-color: var(--eth-dp-in-range-bg, color-mix(in srgb, var(--eth-dp-primary, #0b7077) 25%, transparent));
-}
-
-.eth-dp-theme-dark .eth-dp-day:not(.empty):hover,
-.eth-dp-theme-dark .eth-dp-grid-btn:hover {
-    background-color: var(--eth-dp-hover-bg, #374151);
-    color: var(--eth-dp-hover-text, inherit);
+    color: #f1f5f9;
 }
 
 .eth-dp-theme-dark .eth-dp-day.empty {
-    color: #4b5563;
+    color: #334155;
 }
 
-.eth-dp-theme-dark .eth-dp-time-section,
-.eth-dp-theme-dark .eth-dp-actions {
-    border-color: #374151;
+.eth-dp-theme-dark .eth-dp-day.is-disabled {
+    color: #475569;
 }
 
-.eth-dp-theme-dark .eth-dp-actions {
-    background-color: #111827;
+.eth-dp-theme-dark .eth-dp-time-section {
+    background-color: #1e293b;
+    border-color: #334155;
 }
 
 .eth-dp-theme-dark .eth-dp-select {
-    background-color: #374151;
-    color: #f3f4f6;
-    border-color: #4b5563;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23f3f4f6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #f8fafc;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
 }
 
 .eth-dp-theme-dark .eth-dp-time-colon {
-    color: #f3f4f6;
+    color: #94a3b8;
 }
 
 .eth-dp-theme-dark .eth-dp-range-time-label {
-    color: var(--eth-dp-text, #9ca3af);
+    color: #94a3b8;
+}
+
+.eth-dp-theme-dark .eth-dp-actions {
+    background-color: #0f172a;
+    border-color: #334155;
 }
 
 .eth-dp-theme-dark .eth-dp-cancel-btn {
-    background-color: #1f2937;
-    border-color: #4b5563;
-    color: #f3f4f6;
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
 }
 
 .eth-dp-theme-dark .eth-dp-cancel-btn:hover {
-    background-color: #374151;
+    background-color: #334155;
 }
 
-/* Size Overrides */
-.eth-dp-size-medium .eth-dp-popup {
-    width: 280px;
+/* ==========================================================================
+   Component Sizes (small, medium, large)
+   ========================================================================== */
+
+/* Small */
+.eth-dp-size-small {
+    max-width: 270px;
 }
 
-.eth-dp-size-medium .eth-dp-header {
-    padding: 16px 16px 8px 16px;
-}
-
-.eth-dp-size-medium .eth-dp-month-label {
-    font-size: 16px;
-}
-
-.eth-dp-size-medium .eth-dp-year-label {
-    font-size: 16px;
-}
-
-.eth-dp-size-medium .eth-dp-body {
-    padding: 0 16px 8px 16px;
-}
-
-.eth-dp-size-medium .eth-dp-day {
-    width: 32px;
-    height: 32px;
+.eth-dp-size-small .eth-dp-input {
+    padding: 7px 58px 7px 11px;
     font-size: 13px;
-}
-
-.eth-dp-size-medium .eth-dp-grid-btn {
-    padding: 8px 4px;
-    font-size: 13px;
-}
-
-.eth-dp-size-medium .eth-dp-weekday {
-    font-size: 12px;
-}
-
-.eth-dp-size-medium .eth-dp-input {
-    font-size: clamp(11px, 4.5cqw, 14px);
-    padding: 8px 12px;
-}
-
-.eth-dp-size-medium .eth-dp-select {
-    font-size: 13px;
-    padding: 4px 18px 4px 6px;
-    background-size: 8px auto;
-    background-position: right 6px top 50%;
-}
-
-.eth-dp-size-medium .eth-dp-time-inputs.range-inputs .eth-dp-select {
-    font-size: 12px;
-    padding-right: 14px;
-    background-size: 7px auto;
-    background-position: right 4px top 50%;
-}
-
-.eth-dp-size-medium .eth-dp-cancel-btn,
-.eth-dp-size-medium .eth-dp-save-btn {
-    font-size: 13px;
-    padding: 6px 14px;
-}
-
-.eth-dp-size-medium .eth-dp-time-section,
-.eth-dp-size-medium .eth-dp-actions {
-    padding: 12px 16px;
-}
-
-.eth-dp-size-medium .eth-dp-range-time-label {
-    font-size: 12px;
+    border-radius: 6px;
 }
 
 .eth-dp-size-small .eth-dp-popup {
-    width: 240px;
+    width: 270px;
+    border-radius: 10px;
 }
 
 .eth-dp-size-small .eth-dp-header {
-    padding: 12px 12px 6px 12px;
+    padding: 10px 12px 6px 12px;
 }
 
-.eth-dp-size-small .eth-dp-month-label {
-    font-size: 14px;
-}
-
-.eth-dp-size-small .eth-dp-year-label {
-    font-size: 14px;
+.eth-dp-size-small .eth-dp-header-pill {
+    font-size: 13.5px;
+    padding: 3px 6px;
 }
 
 .eth-dp-size-small .eth-dp-body {
-    padding: 0 12px 6px 12px;
-}
-
-.eth-dp-size-small .eth-dp-day {
-    width: 26px;
-    height: 26px;
-    font-size: 12px;
-}
-
-.eth-dp-size-small .eth-dp-grid-btn {
-    padding: 6px 2px;
-    font-size: 12px;
+    padding: 0 10px 6px 10px;
 }
 
 .eth-dp-size-small .eth-dp-weekday {
     font-size: 11px;
 }
 
-.eth-dp-size-small .eth-dp-input {
-    font-size: clamp(11px, 4cqw, 13px);
-    padding: 6px 10px;
+.eth-dp-size-small .eth-dp-day {
+    width: 30px;
+    height: 30px;
+    font-size: 12.5px;
 }
 
-.eth-dp-size-small .eth-dp-select {
-    font-size: 12px;
-    padding: 2px 14px 2px 4px;
-    background-size: 7px auto;
-    background-position: right 4px top 50%;
+.eth-dp-size-small .eth-dp-grid-btn {
+    padding: 8px 2px;
+    font-size: 12.5px;
 }
 
-.eth-dp-size-small .eth-dp-time-inputs.range-inputs .eth-dp-select {
-    font-size: 11px;
-    padding-right: 12px;
-    background-size: 6px auto;
-    background-position: right 4px top 50%;
+.eth-dp-size-small .eth-dp-actions {
+    padding: 8px 10px;
 }
 
+.eth-dp-size-small .eth-dp-today-btn,
 .eth-dp-size-small .eth-dp-cancel-btn,
 .eth-dp-size-small .eth-dp-save-btn {
+    padding: 4px 10px;
     font-size: 12px;
-    padding: 4px 12px;
 }
 
-.eth-dp-size-small .eth-dp-time-section,
-.eth-dp-size-small .eth-dp-actions {
-    padding: 10px 12px;
+/* Medium (Default) */
+.eth-dp-size-medium {
+    max-width: 320px;
 }
 
-.eth-dp-size-small .eth-dp-range-time-label {
-    font-size: 11px;
+.eth-dp-size-medium .eth-dp-popup {
+    width: 320px;
 }
 
-.eth-dp-size-small .eth-dp-time-inputs.range-inputs .eth-dp-time-colon {
-    font-size: 11px;
+/* Large */
+.eth-dp-size-large {
+    max-width: 360px;
+}
+
+.eth-dp-size-large .eth-dp-input {
+    padding: 11px 72px 11px 15px;
+    font-size: 15px;
+    border-radius: 9px;
+}
+
+.eth-dp-size-large .eth-dp-popup {
+    width: 360px;
+    border-radius: 14px;
+}
+
+.eth-dp-size-large .eth-dp-header {
+    padding: 16px 18px 12px 18px;
+}
+
+.eth-dp-size-large .eth-dp-header-pill {
+    font-size: 16px;
+}
+
+.eth-dp-size-large .eth-dp-body {
+    padding: 0 16px 12px 16px;
+}
+
+.eth-dp-size-large .eth-dp-weekday {
+    font-size: 13px;
+}
+
+.eth-dp-size-large .eth-dp-day {
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
+}
+
+.eth-dp-size-large .eth-dp-grid-btn {
+    padding: 14px 4px;
+    font-size: 14.5px;
+}
+
+.eth-dp-size-large .eth-dp-actions {
+    padding: 12px 16px;
+}
+
+.eth-dp-size-large .eth-dp-today-btn,
+.eth-dp-size-large .eth-dp-cancel-btn,
+.eth-dp-size-large .eth-dp-save-btn {
+    padding: 7px 16px;
+    font-size: 13.5px;
 }
