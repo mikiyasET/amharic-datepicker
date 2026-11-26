@@ -152,7 +152,7 @@ Enable Ethiopian 12-hour time or Gregorian time:
   value={date}
   onChange={setDate}
   showTime={true}
-  calendarType="ethiopian" // Ethiopian time (ጠዋት, ከሰዓት, ማታ...)
+  calendarType="ethiopian" // Ethiopian time (ንጋት, ጠዋት, ከሰዓት, ወደ ማታ, ምሽት, ማታ, ሌሊት, እኩለ ሌሊት)
 />
 ```
 
@@ -227,7 +227,7 @@ export interface EthDateValue {
   day: number;
   hour?: number;
   minute?: number;
-  ampm?: 'ቀን' | 'ማታ' | 'ጠዋት' | 'ከሰዓት' | 'ምሽት' | 'ሌሊት' | 'AM' | 'PM' | string;
+  ampm?: 'ቀን' | 'ማታ' | 'ንጋት' | 'ጠዋት' | 'ከሰዓት' | 'ወደ ማታ' | 'ምሽት' | 'ሌሊት' | 'እኩለ ሌሊት' | 'AM' | 'PM' | string;
 }
 ```
 

@@ -254,7 +254,7 @@ export const AmharicDatePicker: React.FC<AmharicDatePickerProps> = (props) => {
             if (outputFormat === 'ethiopian' && isGreg) {
                 return toGregorianValue(raw);
             }
-            if (isGreg && (raw.month === 13 || raw.ampm === 'ቀን' || raw.ampm === 'ማታ' || raw.ampm === 'ጠዋት' || raw.ampm === 'ከሰዓት' || raw.ampm === 'ምሽት' || raw.ampm === 'ሌሊት')) {
+            if (isGreg && (raw.month === 13 || raw.ampm === 'ቀን' || raw.ampm === 'ማታ' || raw.ampm === 'ንጋት' || raw.ampm === 'ጠዋት' || raw.ampm === 'ከሰዓት' || raw.ampm === 'ወደ ማታ' || raw.ampm === 'ምሽት' || raw.ampm === 'ሌሊት' || raw.ampm === 'እኩለ ሌሊት')) {
                 return toGregorianValue(raw);
             }
             if (!isGreg && (raw.ampm === 'AM' || raw.ampm === 'PM')) {

@@ -1,6 +1,6 @@
 {
   "name": "amharic-datepicker",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A modern, highly customizable React component for picking Amharic (Ethiopian) dates, built with zero external calendar dependencies.",
   "author": "Mikiyas Lemlemu <Mikiyaslemlemu@gmail.com>",
   "license": "MIT",
@@ -46,7 +46,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "amharic-datepicker-utils": "^1.1.0"
+    "amharic-datepicker-utils": "^1.1.1"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

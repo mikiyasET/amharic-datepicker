@@ -53,7 +53,7 @@ function App() {
   useEffect(() => {
     const convertD = (d: EthDateValue | null, targetFormat: 'ethiopian' | 'gregorian'): EthDateValue | null => {
       if (!d) return null
-      const isEth = d.month === 13 || d.ampm === 'ቀን' || d.ampm === 'ማታ' || d.ampm === 'ጠዋት' || d.ampm === 'ከሰዓት' || d.ampm === 'ምሽት' || d.ampm === 'ሌሊት'
+      const isEth = d.month === 13 || d.ampm === 'ቀን' || d.ampm === 'ማታ' || d.ampm === 'ንጋት' || d.ampm === 'ጠዋት' || d.ampm === 'ከሰዓት' || d.ampm === 'ወደ ማታ' || d.ampm === 'ምሽት' || d.ampm === 'ሌሊት' || d.ampm === 'እኩለ ሌሊት'
       const isGreg = !isEth
 
       if (targetFormat === 'gregorian' && isEth) {
